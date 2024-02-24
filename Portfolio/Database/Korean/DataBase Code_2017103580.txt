@@ -1,0 +1,102 @@
+1.MySQL 코드
+create table Customer
+(
+   Id char(16) unique,
+   password_user char(16) not null,
+   Phone_number char(11) unique,
+   Gender char(1),
+   Age tinyint,
+   primary key(id)
+);
+
+create table Seller
+(
+   Id char(16) unique,
+   password_user char(16) not null,
+   Phone_number char(11) unique,
+   Gender char(1),
+   Age tinyint,
+   primary key(Id)
+);
+
+create table Product 
+(
+	Name varchar(255) not null,
+	Seller_ID char(16) not null,
+	Price mediumint,
+	Release_date datetime,
+	Company char(20),
+	Category varchar(255)
+	
+	primary key(Name, Seller_id),
+	foreign key (Seller_id) references Seller(Id) ON DELETE CASCADE
+);
+
+create table Wishlist
+(
+	Product_name varchar(255) not null,
+	Customer_id char(16) not null,
+	Seller_id char(16) not null,
+	
+	primary key(Product_name, Customer_id, Seller_id),
+	foreign key (Seller_id, Product_name) references Product(Seller_id, Name) ON UPDATE CASCADE ON DELETE CASCADE,
+	foreign key (Customer_id) references Customer(Id) ON DELETE CASCADE 
+);
+
+create table Searchword
+(
+	Customer_id char(16) not null,
+	Word varchar(100) not null,
+	search_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+	
+	primary key(Word,Customer_id, search_time),
+	foreign key (Customer_id) references Customer(Id)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+create table Buylog
+(
+	Product_name varchar(255) not null,
+	Customer_id char(16) not null,
+	Seller_id char(16) not null,
+	buy_time DATETIME DEFAULT CURRENT_TIMESTAMP;
+	
+	primary key(Product_name, Customer_id, Seller_id),
+	foreign key (Seller_id, Product_name) references Product(Seller_id, Name) ON UPDATE CASCADE ON DELETE CASCADE
+	foreign key (Customer_id) references Customer(Id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+2.Test data(MySQL)
+0)Customer
+insert into Customer(Id,password_user,Phone_number,Gender,Age) value('powergem72', 'fkjwfekbfkw','01043294392','1','24'),
+value('vaking72', 'sdlfn234nkl','01023444392','1','24'), value('skyway', 'njknrk23j4', '01023483939', '0','22');
+
+1)Seller
+insert into Seller(Id,password_user,Phone_number,Gender,Age) value('alpha', 'fkj23ekbfkw','01043294392','1','56'),
+value('Beta', 'sdlfn234nkl','01023444392','0','20'), value('Gamma', 'fk234fekbfkw','01043294392','1','45'),
+value('delta', 'sdlfn234nkl','01023444392','0','30');
+
+2)Product
+insert into Product(Name,Seller_ID,Price,Release_date,Company,Category) value('Audeze isine10', 'alpha', 500000, '2017-10-20','Audeze','Earphone'),
+value('ATH-M50X', 'alpha', 180000, '2013-04-05', 'Audio Technica', 'Headphone'), value('Beats', 'alpha', 300000, '2016-05-06', 'Dr_dre', 'Earphone'),
+value('ATH-LS70is', 'alpha', 170000, '2012-05-03', 'Audio Technica', 'Earphone'), value('ATH-LS50is', 'alpha', 120000, '2012-05-03', 'Audio Technica', 'Earphone')
+value('M5-TWS', 'alpha', 252000, '2013-04-05', 'Advanced', 'Bluetooth Earphone'), value('BE-06','alpha', 45000, '2018-04-02', 'Candy', 'Bluetooth Earphone'),
+value('TS-10','alpha', 89100, '2014-04-02', 'Candy', 'Bluetooth Earphone'), value('TS-0S','alpha', 75000, '2014-04-02', 'Candy', 'Bluetooth Earphone')
+
+insert into Product(Name,Seller_ID,Price,Release_date,Company,Category) values('Iphone5S', 'Beta', 100000, '2014-10-22', 'Apple', 'SmartPhone'),
+('Iphone5C', 'Beta', 80000, '2014-10-22', 'Apple', 'SmartPhone'), ('Iphone6', 'delta', 120000, '2015-10-22', 'Apple', 'SmartPhone'),
+('Iphone7', 'Beta', 200000, '2017-10-22', 'Apple', 'SmartPhone'), ('Iphone8', 'Beta', 140000, '2014-10-22', 'Apple', 'SmartPhone'),
+('Iphone7+', 'Beta', 220000, '2016-10-22', 'Apple', 'SmartPhone'), ('Iphone9', 'Beta', 500000, '2014-10-22', 'Apple', 'SmartPhone'),
+('Iphone11', 'Beta', 1500000, '2020-10-22', 'Apple', 'SmartPhone'), ('Iphone10', 'Beta', 1000000, '2020-10-22', 'Apple', 'SmartPhone'),
+('Iphone12', 'Beta', 2000000, '2021-10-22', 'Apple', 'SmartPhone'), ('Iphone4S', 'delta', 60000, '2013-10-22', 'Apple', 'SmartPhone'),
+('Iphone5', 'delta', 90000, '2014-10-22', 'Apple', 'SmartPhone'), ('Iphone6+', 'Beta', 130000, '2015-10-22', 'Apple', 'SmartPhone');
+
+3)Wishlist
+insert into Wishlist(Product_name,Customer_id,Seller_id) values ('Iphone6','powergem72','Beta'), ('Iphone6+','powergem72', 'Beta');
+
+4)Searchword
+insert into Searchword(Customer_id, Word) values('powergem72', 'iphone'), ('powergem72', 'iphone5'), ('powergem72', 'iphone6'), (powergem72, iphone6+), (powergem72, iphone5S),
+('skyway', 'earphone'), ('skyway', 'headphone'), ('skyway', 'Audeze'), (skyway, 'cost effective earphone'),('skyway', 'good sound earphone');
+
+5)Buylog
+insert into Buylog(Product_name,Customer_id,Seller_id) values('ATH-M50X', 'powergem72', 'alpha'), ('Iphone11','vaking72', 'Beta');
